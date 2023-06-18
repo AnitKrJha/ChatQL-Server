@@ -4,15 +4,17 @@ import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import express from "express";
 import http from "http";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import bodyParser from "body-parser";
 import typeDefs from "./graphql/typeDefs";
 import resolvers from "./graphql/Resolvers";
+import * as dotenv from "dotenv";
 
 interface MyContext {
   token?: string;
 }
 const main = async () => {
+  dotenv.config();
   // Required logic for integrating with Express
   const app = express();
   // Our httpServer handles incoming requests to our Express app.
@@ -20,6 +22,10 @@ const main = async () => {
   // enabling our servers to shut down gracefully.
   const httpServer = http.createServer(app);
 
+  const corsOptions: CorsOptions = {
+    origin: process.env.CLIENT_ORIGIN,
+    credentials: true,
+  };
   // Same ApolloServer initialization as before, plus the drain plugin
   // for our httpServer.
   const server = new ApolloServer<MyContext>({
