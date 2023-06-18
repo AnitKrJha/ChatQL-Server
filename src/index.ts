@@ -39,8 +39,8 @@ const main = async () => {
   // Set up our Express middleware to handle CORS, body parsing,
   // and our expressMiddleware function.
   app.use(
-    "/",
-    cors<cors.CorsRequest>(),
+    "/graphql",
+    cors<cors.CorsRequest>(corsOptions),
     bodyParser.json(),
     // expressMiddleware accepts the same arguments:
     // an Apollo Server instance and optional configuration options
@@ -53,7 +53,7 @@ const main = async () => {
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: 4000 }, resolve)
   );
-  console.log(`🚀 Server ready at http://localhost:4000/`);
+  console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 };
 
 main().catch((err) => console.log("error has occured", err));
